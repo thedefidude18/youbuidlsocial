@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useOrbis } from '@orbisclub/components';
 import PostItem from './PostItem';
 import { LoadingCircle } from './Icons';
+import SkeletonPost from './SkeletonPost';
 
 const Feed = ({ onRefresh }) => {
   const { orbis } = useOrbis();
@@ -23,8 +24,8 @@ const Feed = ({ onRefresh }) => {
           order_by: 'last_reply_timestamp',
         },
         0,
-        50
-      ); // Fetch up to 50 posts
+        10
+      ); // Fetch up to 10 posts
 
       if (error) {
         setError('Failed to fetch feed data. Please try again.');
@@ -51,32 +52,21 @@ const Feed = ({ onRefresh }) => {
   }, [onRefresh]);
 
   return (
-    <div>
-      {/* Loading State */}
-      {isLoading && (
-        <div className="mt-8 flex justify-center">
-          <LoadingCircle className="w-8 h-8 text-blue-500" />
-        </div>
-      )}
-
-      {/* Error State */}
-      {error && (
-        <div className="mt-8 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg">
-          {error}
-        </div>
-      )}
-
-      {/* Feed Posts */}
-      {!isLoading && !error && (
-        <div className="space-y-6">
-          {posts.length > 0 ? (
-            posts.map((post) => <PostItem key={post.stream_id} post={post} />)
-          ) : (
-            <div className="text-center text-gray-500">
-              No posts found. Be the first to create one!
-            </div>
-          )}
-        </div>
+    <div className="space-y-6">
+      {isLoading ? (
+        <>
+          <SkeletonPost />
+          <SkeletonPost />
+          <SkeletonPost />
+        </>
+      ) : error ? (
+        <div className="text-center text-red-500 p-4">{error}</div>
+      ) : (
+        posts.map((post) => (
+          <div key={post.stream_id} className="card p-4 hover:border-gray-300 transition-colors">
+            <PostItem post={post} />
+          </div>
+        ))
       )}
     </div>
   );

@@ -2,27 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font faces */
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 400;
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 500;
+  src: url('/fonts/Poppins-Medium.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 600;
+  src: url('/fonts/Poppins-SemiBold.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 700;
+  src: url('/fonts/Poppins-Bold.ttf') format('truetype');
+  font-display: swap;
+}
+
 @layer base {
+  html {
+    font-family: 'Poppins', sans-serif;
+  }
+
   :root {
-    --brand-color: #00000034;
-    --brand-color-hover: #cff84800;
-    --bg-color: #000000;
+    --brand-color: #5D43FB;
+    --brand-color-hover: #4935E8;
+    --bg-color: #f1f5f9;
     --border-color: #e5e7eb;
     --text-primary: #000000;
-    --text-secondary: #000000;
-    --text-tertiary: #000000;
+    --text-secondary: #4B5563;
+    --text-tertiary: #6B7280;
   }
 
   .dark {
-    --bg-color: #010409;
-    --border-color: #374151;
-    --text-primary: #f9fafb;
-    --text-secondary: #e5e7eb;
-    --text-tertiary: #d1d5db;
+    --bg-color: #1A1B1F;
+    --border-color: #27282C;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --text-tertiary: #9CA3AF;
   }
 
   body {
-    @apply bg-white dark:bg-dark-primary text-gray-900 dark:text-dark-primary transition-colors duration-200 !important;
+    @apply bg-[var(--bg-color)] text-gray-900 dark:text-dark-primary transition-colors duration-200 !important;
   }
 
   /* Ensure headings and paragraphs use dark mode */
@@ -41,7 +74,7 @@
 
   /* Ensure links use dark mode */
   a {
-    @apply text-[var(--brand-color)] hover:text-[var(--brand-color-hover)];
+    @apply text-[var(--brand-color)];
   }
 
   /* Ensure form inputs use dark mode */
@@ -53,14 +86,14 @@
 
   /* Ensure buttons use dark mode */
   button {
-    @apply bg-[var(--brand-color)] text-white hover:bg-[var(--brand-color-hover)] dark:bg-dark-secondary dark:text-dark-primary dark:hover:bg-gray-700;
+    @apply bg-[var(--brand-color)] text-white dark:bg-dark-secondary dark:text-dark-primary;
   }
 }
 
 @layer components {
   /* Ensure all components use dark mode */
   .btn {
-    @apply text-sm font-medium inline-flex items-center justify-center rounded-full leading-5 whitespace-nowrap transition duration-150 ease-in-out;
+    @apply text-sm font-medium inline-flex items-center justify-center rounded-full leading-5 whitespace-nowrap;
   }
 
   .btn-sm {
@@ -68,20 +101,20 @@
   }
 
   .btn-brand {
-    @apply bg-[var(--brand-color)] text-white hover:bg-[var(--brand-color-hover)];
+    @apply bg-[var(--brand-color)] text-white;
   }
 
   .btn-secondary {
-    @apply bg-gray-100 dark:bg-dark-secondary text-gray-700 dark:text-dark-primary hover:bg-gray-200 dark:hover:bg-gray-700;
+    @apply bg-gray-100 dark:bg-dark-secondary text-gray-700 dark:text-dark-primary;
   }
 
   /* Card components */
   .card {
-    @apply bg-white dark:bg-dark-secondary border border-gray-200 dark:border-dark-border rounded-lg shadow-sm;
+    @apply bg-white dark:bg-dark-secondary rounded-xl shadow-sm border border-gray-200/50 dark:border-dark-border;
   }
 
   .card-hover {
-    @apply hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200;
+    @apply transition-none;
   }
 
   /* Form components */
@@ -99,7 +132,7 @@
 
   /* Navigation components */
   .nav-link {
-    @apply text-gray-600 dark:text-dark-secondary hover:text-gray-900 dark:hover:text-dark-primary transition-colors duration-200;
+    @apply text-gray-600 dark:text-dark-secondary transition-none;
   }
 
   .nav-link-active {
@@ -112,7 +145,34 @@
   }
 
   .dropdown-item {
-    @apply block px-4 py-2 text-sm text-gray-700 dark:text-dark-secondary hover:bg-gray-100 dark:hover:bg-gray-700;
+    @apply block px-4 py-2 text-sm text-gray-700 dark:text-dark-secondary;
+  }
+
+  /* Icon variants for light/dark mode */
+  .icon-primary {
+    @apply text-gray-600 dark:text-gray-300;
+  }
+
+  .icon-secondary {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+
+  .icon-action {
+    @apply text-gray-400 dark:text-gray-500;
+  }
+
+  /* Group hover for buttons - completely transparent */
+  .group:hover .icon-action {
+    @apply text-gray-400 dark:text-gray-500;
+  }
+
+  /* Button reset */
+  .btn-reset {
+    @apply bg-transparent border-0 p-0 m-0;
+  }
+
+  .icon-button {
+    @apply bg-transparent text-gray-400 dark:text-gray-500;
   }
 }
 
@@ -132,34 +192,9 @@
   @apply dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-dark-primary prose-p:text-gray-600 dark:prose-p:text-dark-secondary prose-a:text-[var(--brand-color)] prose-strong:text-gray-900 dark:prose-strong:text-dark-primary;
 }
 
-/* Font faces */
-@font-face {
-  font-family: 'Poppins';
-  font-weight: 400;
-  src: url('/fonts/Poppins-Regular.ttf');
-}
-
-@font-face {
-  font-family: 'Poppins';
-  font-weight: 500;
-  src: url('/fonts/Poppins-Medium.ttf');
-}
-
-@font-face {
-  font-family: 'Poppins';
-  font-weight: 600;
-  src: url('/fonts/Poppins-SemiBold.ttf');
-}
-
-@font-face {
-  font-family: 'Poppins';
-  font-weight: 700;
-  src: url('/fonts/Poppins-Bold.ttf');
-}
-
 /* Transitions */
 .transition-theme {
-  @apply transition-all duration-200 ease-in-out;
+  @apply transition-none;
 }
 
 /* Custom scrollbar for browsers that support it */

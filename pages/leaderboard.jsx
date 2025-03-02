@@ -99,75 +99,76 @@ export default function Leaderboard() {
       </Head>
 
       <div className="flex flex-col min-h-screen bg-white dark:bg-dark-primary">
-        <Header />
+        {/* Fixed Header */}
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <Header />
+        </div>
         
-        <div className="flex-1 pt-16">
-          {/* Left Sidebar - Hidden on mobile */}
-          <div className="hidden md:block fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-dark-primary border-r border-gray-100 dark:border-dark-border overflow-y-auto">
+        {/* Main Content Area - starts below fixed header */}
+        <div className="flex pt-16 h-screen">
+          {/* Left Sidebar - fixed */}
+          <div className="hidden md:block fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-dark-primary border-r border-gray-100 dark:border-dark-border">
             <LeftSidebar />
           </div>
 
-          {/* Main Content */}
-          <div className="w-full md:ml-64 md:mr-80 min-h-screen">
-            <main className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          {/* Main Scrollable Content */}
+          <div className="flex-1 md:ml-64 md:mr-80 overflow-y-auto">
+            <main className="max-w-3xl mx-auto py-6 px-4 sm:px-6">
               {/* Header Section */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-dark-primary">
-                    Community Leaderboard
-                  </h1>
-                  <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-dark-secondary">
-                    Recognizing our top contributors and builders
-                  </p>
-                </div>
+              <div className="mb-8">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-dark-primary mb-2">
+                  Community Leaderboard
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600 dark:text-dark-secondary">
+                  Recognizing our top contributors and builders
+                </p>
+              </div>
 
-                {/* Timeframe Filters - Scrollable on mobile */}
-                <div className="w-full sm:w-auto overflow-x-auto">
-                  <div className="flex space-x-2 min-w-max">
-                    {timeframes.map((timeframe) => (
-                      <button
-                        key={timeframe.id}
-                        onClick={() => setSelectedTimeframe(timeframe.id)}
-                        className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
-                          selectedTimeframe === timeframe.id
-                            ? 'bg-[var(--brand-color)] text-white'
-                            : 'bg-gray-100 dark:bg-dark-secondary text-gray-700 dark:text-dark-secondary hover:bg-gray-200 dark:hover:bg-dark-tertiary'
-                        }`}
-                      >
-                        {timeframe.label}
-                      </button>
-                    ))}
-                  </div>
+              {/* Timeframe Filters */}
+              <div className="mb-6">
+                <div className="flex space-x-2">
+                  {timeframes.map((timeframe) => (
+                    <button
+                      key={timeframe.id}
+                      onClick={() => setSelectedTimeframe(timeframe.id)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                        selectedTimeframe === timeframe.id
+                          ? 'bg-[var(--brand-color)] text-white'
+                          : 'bg-gray-100 dark:bg-dark-secondary text-gray-700 dark:text-dark-secondary hover:bg-gray-200 dark:hover:bg-dark-tertiary'
+                      }`}
+                    >
+                      {timeframe.label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Loading State */}
+              {/* Content Section */}
               {loading ? (
                 <div className="flex justify-center py-12">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--brand-color)]"></div>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {/* User Cards */}
                   {users.map((user, index) => (
                     <div
                       key={user.did}
-                      className="bg-white dark:bg-dark-secondary rounded-lg border border-gray-200 dark:border-dark-border p-4 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+                      className="bg-white dark:bg-dark-secondary rounded-lg border border-gray-200 dark:border-dark-border p-4"
                     >
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                         {/* Rank & Avatar */}
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center gap-4 min-w-[200px]">
                           <div className="flex-shrink-0">
                             {index < 3 ? (
-                              <div className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                              <div className={`w-10 h-10 flex items-center justify-center rounded-full ${
                                 index === 0 ? 'bg-yellow-100 text-yellow-600' :
                                 index === 1 ? 'bg-gray-100 text-gray-600' :
                                 'bg-orange-100 text-orange-600'
                               }`}>
-                                <FaTrophy />
+                                <FaTrophy className="w-5 h-5" />
                               </div>
                             ) : (
-                              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 dark:bg-dark-tertiary text-gray-500 dark:text-dark-secondary">
+                              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 dark:bg-dark-tertiary text-gray-500 dark:text-dark-secondary font-medium">
                                 #{index + 1}
                               </div>
                             )}
@@ -175,7 +176,7 @@ export default function Leaderboard() {
 
                           <button
                             onClick={() => setShowUserPopup(user.did)}
-                            className="flex items-center space-x-2 text-gray-900 dark:text-dark-primary hover:underline"
+                            className="flex items-center text-gray-900 dark:text-dark-primary hover:underline"
                           >
                             <User details={user.details} />
                           </button>
@@ -183,53 +184,44 @@ export default function Leaderboard() {
 
                         {/* Stats */}
                         <div className="flex-1 w-full sm:w-auto">
-                          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 dark:text-dark-secondary">
-                            <span className="flex items-center">
-                              <FaTrophy className="w-4 h-4 mr-1 text-yellow-500" />
-                              {user.points}
+                          <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 text-sm text-gray-500 dark:text-dark-secondary">
+                            <span className="flex items-center gap-2">
+                              <FaTrophy className="w-4 h-4 text-yellow-500" />
+                              <span>{user.points}</span>
                             </span>
-                            <span className="flex items-center">
-                              <FaHeart className="w-4 h-4 mr-1 text-red-500" />
-                              {user.likes}
+                            <span className="flex items-center gap-2">
+                              <FaHeart className="w-4 h-4 text-red-500" />
+                              <span>{user.likes}</span>
                             </span>
-                            <span className="flex items-center">
-                              <FaComment className="w-4 h-4 mr-1 text-blue-500" />
-                              {user.comments}
+                            <span className="flex items-center gap-2">
+                              <FaComment className="w-4 h-4 text-blue-500" />
+                              <span>{user.comments}</span>
                             </span>
-                            <span className="flex items-center">
-                              <FaUsers className="w-4 h-4 mr-1 text-green-500" />
-                              {user.followers}
+                            <span className="flex items-center gap-2">
+                              <FaUsers className="w-4 h-4 text-green-500" />
+                              <span>{user.followers}</span>
                             </span>
-                            <span className="flex items-center">
-                              <FaEthereum className="w-4 h-4 mr-1 text-purple-500" />
-                              {user.donations}
+                            <span className="flex items-center gap-2">
+                              <FaEthereum className="w-4 h-4 text-purple-500" />
+                              <span>{user.donations}</span>
                             </span>
                           </div>
                         </div>
 
                         {/* Total Score */}
-                        <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-dark-primary ml-auto">
+                        <div className="text-xl font-bold text-gray-900 dark:text-dark-primary ml-auto">
                           {calculateScore(user)}
                         </div>
                       </div>
                     </div>
                   ))}
-
-                  {/* Empty State */}
-                  {users.length === 0 && (
-                    <div className="text-center py-12 bg-gray-50 dark:bg-dark-secondary rounded-lg">
-                      <p className="text-gray-600 dark:text-dark-secondary">
-                        No users found for the selected timeframe.
-                      </p>
-                    </div>
-                  )}
                 </div>
               )}
             </main>
           </div>
 
-          {/* Right Sidebar - Hidden on mobile */}
-          <div className="hidden md:block fixed right-0 top-16 bottom-0 w-80 bg-white dark:bg-dark-primary border-l border-gray-100 dark:border-dark-border overflow-y-auto">
+          {/* Right Sidebar - fixed */}
+          <div className="hidden md:block fixed right-0 top-16 bottom-0 w-80 bg-white dark:bg-dark-primary border-l border-gray-100 dark:border-dark-border">
             <Sidebar />
           </div>
         </div>

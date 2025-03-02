@@ -5,30 +5,36 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
   ],
-  darkMode: 'class', // Ensure dark mode is enabled via class
+  darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+      },
       colors: {
         brand: 'var(--brand-color)',
         'brand-hover': 'var(--brand-color-hover)',
         dark: {
-          primary: '#111827',
-          secondary: '#030712',
-          tertiary: '#374151',
+          primary: '#FFFFFF',
+          secondary: '#A1A1AA',
+          tertiary: '#9CA3AF',
         },
       },
       backgroundColor: {
-        'dark-primary': '#010409',
-        'dark-secondary': '#030712',
-        'dark-tertiary': '#374151',
+        'dark-primary': '#1A1B1F',
+        'dark-secondary': '#27282C',
+        'dark-tertiary': '#2A2B2F',
       },
       textColor: {
-        'dark-primary': '#F9FAFB',
-        'dark-secondary': '#D1D5DB',
+        'dark-primary': '#FFFFFF',
+        'dark-secondary': '#A1A1AA',
         'dark-tertiary': '#9CA3AF',
       },
       borderColor: {
-        'dark-border': '#374151',
+        'dark-border': '#27282C',
+      },
+      transitionProperty: {
+        'none': 'none',
       },
     },
   },

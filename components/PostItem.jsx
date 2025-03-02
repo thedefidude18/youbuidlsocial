@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { User, useOrbis, Comments } from '@orbisclub/components';
 import { getIpfsLink } from '../utils';
-import { CommentsIcon } from './Icons';
+import { CommentsIcon, ShareIcon } from './Icons';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import Upvote from './Upvote';
@@ -10,14 +10,14 @@ import { marked } from 'marked';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import {
-  FaShare,
   FaTag,
   FaEthereum,
   FaEllipsisH,
   FaTrophy,
   FaEllipsisV,
   FaChevronUp,
-  FaChevronDown
+  FaChevronDown,
+  FaDollarSign
 } from 'react-icons/fa';
 import DonateButton from './DonateButton';
 import { CATEGORIES } from '../config/categories';
@@ -305,6 +305,24 @@ export default function PostItem({ post }) {
   const showDonateButton =
     CATEGORIES[post.content?.context]?.enableDonation || false;
 
+  const handleDonate = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!user) {
+      alert('Please connect your wallet to donate');
+      return;
+    }
+    
+    // Open the donate modal or trigger donation flow
+    if (typeof window !== 'undefined') {
+      const donateButton = document.querySelector(`#donate-button-${post.stream_id}`);
+      if (donateButton) {
+        donateButton.click();
+      }
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.ai-menu-container')) {
@@ -317,7 +335,7 @@ export default function PostItem({ post }) {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-dark-secondary border-b border-gray-300 dark:border-gray-700 w-full">
+    <div className="bg-white dark:bg-dark-secondary w-full">
       <div className="p-6">
         <div className="flex items-start space-x-4">
           <Upvote
@@ -356,16 +374,16 @@ export default function PostItem({ post }) {
                 <div className="flex items-center gap-2">
                   <div className="relative">
                     <button
-                      onClick={() => setShowAiMenu(!showAiMenu)}
-                      className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-tertiary transition-colors"
-                      disabled={isLoading}
-                    >
-                      <img
-                        src="/youagent.svg"
-                        alt="AI Actions"
-                        className="w-6 h-6"
-                      />
-                    </button>
+                  onClick={() => setShowAiMenu(!showAiMenu)}
+                  className="p-1 bg-transparent group"
+                  disabled={isLoading}
+                >
+                  <img
+                    src="/youagent.svg"
+                    alt="AI Actions"
+                    className="w-6 h-6 icon-action"
+                  />
+                </button>
 
                     {showAiMenu && (
                       <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-secondary rounded-lg shadow-lg py-1 z-10 border border-gray-200 dark:border-dark-border">
@@ -374,7 +392,7 @@ export default function PostItem({ post }) {
                             alert('Explain functionality coming soon');
                             setShowAiMenu(false);
                           }}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-dark-secondary hover:bg-gray-50 dark:hover:bg-dark-tertiary flex items-center"
+                          className="w-4 h-4 text-gray-500 dark:text-gray-400"
                         >
                           <svg
                             className="w-4 h-4 mr-2"
@@ -440,7 +458,7 @@ export default function PostItem({ post }) {
 
                   <button
                     onClick={() => setShowMenu(!showMenu)}
-                    className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-tertiary transition-colors"
+                    className="p-1 rounded-full bg-transparent"
                     disabled={isLoading}
                   >
                     <FaEllipsisH className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -496,35 +514,26 @@ export default function PostItem({ post }) {
             )}
 
             <div className="mt-4 flex items-center justify-between">
-              <div className="flex items-center space-x-4 text-sm text-gray-500">
+              <div className="flex items-center space-x-4 text-sm">
                 <button
-                  className="flex items-center hover:text-gray-700 transition-colors"
+                  className="flex items-center bg-transparent group"
                   onClick={() => setShowComments(!showComments)}
                 >
-                  <CommentsIcon className="mr-2" />
-                  <span className="mr-1">{post.count_replies || 0}</span>
+                  <CommentsIcon className="icon-action w-5 h-5 mr-2" />
+                  <span className="icon-action mr-1">{post.count_replies || 0}</span>
                   {showComments ? (
-                    <FaChevronUp className="w-3 h-3 ml-1" />
+                    <FaChevronUp className="icon-action w-3 h-3 ml-1" />
                   ) : (
-                    <FaChevronDown className="w-3 h-3 ml-1" />
+                    <FaChevronDown className="icon-action w-3 h-3 ml-1" />
                   )}
                 </button>
 
-                <ChatModal
-                  isVisible={isChatVisible}
-                  onClose={toggleChatVisibility}
-                />
-
-                <span className="inline-flex items-center text-sm font-medium text-yellow-600">
-                  {userPoints} pts
-                </span>
-
                 <button
-                  className="flex items-center hover:text-gray-700"
+                  className="flex items-center bg-transparent group"
                   onClick={handleShare}
                   disabled={isLoading}
                 >
-                  <FaShare className="mr-1" />
+                  <ShareIcon className="icon-action w-6 h-6" />
                 </button>
 
                 <span className="inline-flex items-center text-xs font-small bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded-full">
@@ -533,16 +542,22 @@ export default function PostItem({ post }) {
 
                 {showDonateButton && (
                   <>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-gray-500">Grant:</span>
-                      <div className="flex items-center text-green-600">
-                        <span>{formatDonation(totalDonations.USDT)} USDT</span>
-                      </div>
-                    </div>
-
-                    <DonateButton post={post} disabled={isLoading} />
+                    <button
+                      id={`donate-button-${post.stream_id}`}
+                      className="flex items-center bg-transparent group"
+                      onClick={handleDonate}
+                      disabled={isLoading}
+                    >
+                      <FaDollarSign className="icon-action w-5 h-5" />
+                      <span className="icon-action ml-1">Donate</span>
+                    </button>
+                    <DonateButton post={post} />
                   </>
                 )}
+              </div>
+
+              <div className="flex items-center space-x-2">
+          
               </div>
             </div>
           </div>

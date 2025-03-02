@@ -99,118 +99,98 @@ export default function LeftSidebar() {
   ];
 
   return (
-    <div className="h-full p-4 bg-white dark:bg-dark-primary">
-      <nav className="space-y-8">
-        {/* Main Menu */}
-        <div>
-          <div className="px-3 mb-4">
+    <div> {/* Removed py-4 padding */}
+      <nav>
+        <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-sm border border-gray-200 dark:border-dark-border p-4">
+          {/* Main Menu */}
+          <div className="mb-3"> {/* Reduced margin */}
             <h3 className="text-xs font-semibold text-gray-500 dark:text-dark-secondary uppercase tracking-wider">
               Main Menu
             </h3>
-          </div>
-          <div className="space-y-1">
-            {menuItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  isActivePath(item.path)
-                    ? 'bg-gray-50 dark:bg-dark-secondary'
-                    : 'hover:bg-gray-50 dark:hover:bg-dark-secondary'
-                } group`}
-              >
-                <span className={`${item.color} group-hover:text-opacity-80`}>
-                  {item.icon}
-                </span>
-                <span
-                  className={`ml-3 ${
+            <div className="mt-2 space-y-1">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                     isActivePath(item.path)
-                      ? 'text-gray-900 dark:text-dark-primary'
-                      : 'text-gray-600 dark:text-dark-secondary'
-                  }`}
+                      ? 'bg-gray-50 dark:bg-dark-secondary'
+                      : 'hover:bg-gray-50 dark:hover:bg-dark-secondary'
+                  } group`}
                 >
-                  {item.name}
-                </span>
-              </Link>
-            ))}
+                  <span className={`${item.color} group-hover:text-opacity-80`}>
+                    {item.icon}
+                  </span>
+                  <span className="ml-3">{item.name}</span>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Resources Section */}
-        <div>
-          <div className="px-3 mb-4">
+          {/* Resources */}
+          <div className="mb-3"> {/* Reduced margin */}
             <h3 className="text-xs font-semibold text-gray-500 dark:text-dark-secondary uppercase tracking-wider">
               Resources
             </h3>
-          </div>
-          <div className="space-y-1">
-            {resourceItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  isActivePath(item.path)
-                    ? 'bg-gray-50 dark:bg-dark-secondary'
-                    : 'hover:bg-gray-50 dark:hover:bg-dark-secondary'
-                } group`}
-              >
-                <span className={`${item.color} group-hover:text-opacity-80`}>
-                  {item.icon}
-                </span>
-                <span
-                  className={`ml-3 ${
+            <div className="mt-2 space-y-1">
+              {resourceItems.map((item) => (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                     isActivePath(item.path)
-                      ? 'text-gray-900 dark:text-dark-primary'
-                      : 'text-gray-600 dark:text-dark-secondary'
-                  }`}
+                      ? 'bg-gray-50 dark:bg-dark-secondary'
+                      : 'hover:bg-gray-50 dark:hover:bg-dark-secondary'
+                  } group`}
                 >
-                  {item.name}
-                </span>
-              </Link>
-            ))}
+                  <span className={`${item.color} group-hover:text-opacity-80`}>
+                    {item.icon}
+                  </span>
+                  <span className="ml-3">{item.name}</span>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Socials Section */}
-        <div>
-          <div className="px-3 mb-4">
+          {/* Socials */}
+          <div className="mb-3"> {/* Reduced margin */}
             <h3 className="text-xs font-semibold text-gray-500 dark:text-dark-secondary uppercase tracking-wider">
               Socials
             </h3>
-          </div>
-          <div className="flex space-x-4">
-            {socialItems.map((item) => (
-              <a
-                key={item.path}
-                href={item.path}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-dark-secondary group"
-              >
-                <span className={`${item.color} group-hover:text-opacity-80`}>
-                  {item.icon}
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* User Profile */}
-        {user && (
-          <div className="px-3 mt-auto">
-            <div className="flex items-center p-3 bg-gray-50 dark:bg-dark-secondary rounded-lg">
-              <User details={user} height={32} />
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900 dark:text-dark-primary">
-                  {user?.details?.profile?.username}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-dark-secondary">
-                  {user?.details?.metadata?.email || ''}
-                </p>
-              </div>
+            <div className="mt-2 flex space-x-4">
+              {socialItems.map((item) => (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-dark-secondary group"
+                >
+                  <span className={`${item.color} group-hover:text-opacity-80`}>
+                    {item.icon}
+                  </span>
+                </a>
+              ))}
             </div>
           </div>
-        )}
+
+          {/* User Profile */}
+          {user && (
+            <div className="mt-3"> {/* Reduced margin */}
+              <div className="flex items-center">
+                <User details={user} height={32} />
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900 dark:text-dark-primary">
+                    {user?.details?.profile?.username}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-dark-secondary">
+                    {user?.details?.metadata?.email || ''}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </nav>
     </div>
   );
