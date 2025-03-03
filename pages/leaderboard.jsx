@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useOrbis, User, UserPopup } from "@orbisclub/components";
-import Header from '../components/Header';
-import LeftSidebar from '../components/LeftSidebar';
-import Sidebar from '../components/Sidebar';
+import Layout from '../components/Layout';
 import { FaTrophy, FaHeart, FaComment, FaEthereum, FaUsers } from 'react-icons/fa';
 
 export default function Leaderboard() {
@@ -92,140 +90,108 @@ export default function Leaderboard() {
   ];
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Leaderboard | YouBuidl</title>
         <meta name="description" content="See the top contributors and builders in the YouBuidl community" />
       </Head>
 
-      <div className="flex flex-col min-h-screen bg-white dark:bg-dark-primary">
-        {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-50">
-          <Header />
+      <main className="w-full max-w-2xl py-6 px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-dark-primary mb-2">
+            Community Leaderboard
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-dark-secondary">
+            Recognizing our top contributors and builders
+          </p>
         </div>
-        
-        {/* Main Content Area - starts below fixed header */}
-        <div className="flex pt-16 h-screen">
-          {/* Left Sidebar - fixed */}
-          <div className="hidden md:block fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-dark-primary border-r border-gray-100 dark:border-dark-border">
-            <LeftSidebar />
+
+        {/* Timeframe Filters */}
+        <div className="mb-6 overflow-x-auto">
+          <div className="flex space-x-2">
+            {timeframes.map((timeframe) => (
+              <button
+                key={timeframe.id}
+                onClick={() => setSelectedTimeframe(timeframe.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex-shrink-0 ${
+                  selectedTimeframe === timeframe.id
+                    ? 'bg-[#CDEB63] text-gray-900'
+                    : 'bg-gray-100 dark:bg-dark-secondary text-gray-700 dark:text-dark-secondary hover:bg-gray-200 dark:hover:bg-dark-tertiary'
+                }`}
+              >
+                {timeframe.label}
+              </button>
+            ))}
           </div>
+        </div>
 
-          {/* Main Scrollable Content */}
-          <div className="flex-1 md:ml-64 md:mr-80 overflow-y-auto">
-            <main className="max-w-3xl mx-auto py-6 px-4 sm:px-6">
-              {/* Header Section */}
-              <div className="mb-8">
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-dark-primary mb-2">
-                  Community Leaderboard
-                </h1>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-dark-secondary">
-                  Recognizing our top contributors and builders
-                </p>
-              </div>
-
-              {/* Timeframe Filters */}
-              <div className="mb-6">
-                <div className="flex space-x-2">
-                  {timeframes.map((timeframe) => (
-                    <button
-                      key={timeframe.id}
-                      onClick={() => setSelectedTimeframe(timeframe.id)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                        selectedTimeframe === timeframe.id
-                          ? 'bg-[var(--brand-color)] text-white'
-                          : 'bg-gray-100 dark:bg-dark-secondary text-gray-700 dark:text-dark-secondary hover:bg-gray-200 dark:hover:bg-dark-tertiary'
-                      }`}
-                    >
-                      {timeframe.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Content Section */}
-              {loading ? (
-                <div className="flex justify-center py-12">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--brand-color)]"></div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {users.map((user, index) => (
-                    <div
-                      key={user.did}
-                      className="bg-white dark:bg-dark-secondary rounded-lg border border-gray-200 dark:border-dark-border p-4"
-                    >
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                        {/* Rank & Avatar */}
-                        <div className="flex items-center gap-4 min-w-[200px]">
-                          <div className="flex-shrink-0">
-                            {index < 3 ? (
-                              <div className={`w-10 h-10 flex items-center justify-center rounded-full ${
-                                index === 0 ? 'bg-yellow-100 text-yellow-600' :
-                                index === 1 ? 'bg-gray-100 text-gray-600' :
-                                'bg-orange-100 text-orange-600'
-                              }`}>
-                                <FaTrophy className="w-5 h-5" />
-                              </div>
-                            ) : (
-                              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 dark:bg-dark-tertiary text-gray-500 dark:text-dark-secondary font-medium">
-                                #{index + 1}
-                              </div>
-                            )}
-                          </div>
-
-                          <button
-                            onClick={() => setShowUserPopup(user.did)}
-                            className="flex items-center text-gray-900 dark:text-dark-primary hover:underline"
-                          >
-                            <User details={user.details} />
-                          </button>
+        {/* Content Section */}
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#CDEB63]"></div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {users.map((user, index) => (
+              <div
+                key={user.did}
+                className="bg-white dark:bg-dark-secondary rounded-lg border border-gray-200 dark:border-dark-border p-4"
+              >
+                <div className="flex flex-col gap-2 sm:gap-4">
+                  {/* Top Row - Rank, Avatar, Name, Score */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0">
+                      {index < 3 ? (
+                        <div className={`w-8 sm:w-10 h-8 sm:h-10 flex items-center justify-center rounded-full ${
+                          index === 0 ? 'bg-[#CDEB63] text-gray-900' :
+                          index === 1 ? 'bg-gray-100 text-gray-600' :
+                          'bg-orange-100 text-orange-600'
+                        }`}>
+                          <FaTrophy className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
-
-                        {/* Stats */}
-                        <div className="flex-1 w-full sm:w-auto">
-                          <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 text-sm text-gray-500 dark:text-dark-secondary">
-                            <span className="flex items-center gap-2">
-                              <FaTrophy className="w-4 h-4 text-yellow-500" />
-                              <span>{user.points}</span>
-                            </span>
-                            <span className="flex items-center gap-2">
-                              <FaHeart className="w-4 h-4 text-red-500" />
-                              <span>{user.likes}</span>
-                            </span>
-                            <span className="flex items-center gap-2">
-                              <FaComment className="w-4 h-4 text-blue-500" />
-                              <span>{user.comments}</span>
-                            </span>
-                            <span className="flex items-center gap-2">
-                              <FaUsers className="w-4 h-4 text-green-500" />
-                              <span>{user.followers}</span>
-                            </span>
-                            <span className="flex items-center gap-2">
-                              <FaEthereum className="w-4 h-4 text-purple-500" />
-                              <span>{user.donations}</span>
-                            </span>
-                          </div>
+                      ) : (
+                        <div className="w-8 sm:w-10 h-8 sm:h-10 flex items-center justify-center">
+                          <span className="text-lg font-semibold text-gray-600">
+                            {index + 1}
+                          </span>
                         </div>
-
-                        {/* Total Score */}
-                        <div className="text-xl font-bold text-gray-900 dark:text-dark-primary ml-auto">
-                          {calculateScore(user)}
-                        </div>
-                      </div>
+                      )}
                     </div>
-                  ))}
-                </div>
-              )}
-            </main>
-          </div>
 
-          {/* Right Sidebar - fixed */}
-          <div className="hidden md:block fixed right-0 top-16 bottom-0 w-80 bg-white dark:bg-dark-primary border-l border-gray-100 dark:border-dark-border">
-            <Sidebar />
+                    <button
+                      onClick={() => setShowUserPopup(user.did)}
+                      className="flex items-center text-gray-900 dark:text-dark-primary hover:underline"
+                    >
+                      <User details={user.details} />
+                    </button>
+
+                    <div className="ml-auto text-lg sm:text-xl font-bold text-gray-900 dark:text-dark-primary">
+                      {calculateScore(user)}
+                    </div>
+                  </div>
+                  
+                  {/* Stats Row */}
+                  <div className="flex justify-end items-center text-sm text-gray-500 dark:text-dark-secondary gap-4 px-2">
+                    <div className="flex items-center gap-1">
+                      <FaComment className="w-3.5 h-3.5 text-blue-500" />
+                      <span>{user.comments}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <FaUsers className="w-3.5 h-3.5 text-green-500" />
+                      <span>{user.followers}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <FaEthereum className="w-3.5 h-3.5 text-purple-500" />
+                      <span>{user.donations}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      </div>
+        )}
+      </main>
 
       {/* User Profile Popup */}
       {showUserPopup && (
@@ -246,6 +212,6 @@ export default function Leaderboard() {
           </div>
         </div>
       )}
-    </>
+    </Layout>
   );
 }
